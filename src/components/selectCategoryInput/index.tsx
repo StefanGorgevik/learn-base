@@ -4,28 +4,45 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { CategoryProps } from "../../types";
 
-export const SelectCategoryInput: React.FC = () => {
-  const [age, setAge] = React.useState("");
+const CATEGORIES: CategoryProps[] = [
+  { id: "history", name: "History" },
+  { id: "javascript", name: "Javascript" },
+  { id: "react", name: "React" },
+  { id: "it", name: "IT" },
+  { id: "music", name: "Music" },
+];
 
+interface SelectCategoryInputProps {
+  onCategoryChange: (category: string) => void;
+  category: string;
+}
+
+export const SelectCategoryInput: React.FC<SelectCategoryInputProps> = ({
+  onCategoryChange,
+  category,
+}) => {
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+    onCategoryChange(event.target.value as string);
   };
 
   return (
     <Box sx={{ minWidth: "100%" }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel id="categoty-select-label">Category</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
+          labelId="category-label"
+          id="category"
+          value={category}
+          label="Category"
           onChange={handleChange}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {CATEGORIES.map((cat: CategoryProps) => (
+            <MenuItem key={cat.id} value={cat.name}>
+              {cat.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>

@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({ handleOpenModal }) => {
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
-            <IconButton onClick={handleOpenModal}>
+            <IconButton onClick={handleOpenModal} sx={{ color: "white" }}>
               <AddBoxIcon />
             </IconButton>
           </Box>

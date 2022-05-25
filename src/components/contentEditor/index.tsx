@@ -20,7 +20,7 @@ export const ContentEditor: React.FC = () => {
     e.preventDefault();
     const nextState = RichUtils.toggleInlineStyle(editorState, formatType);
     console.log("NEXT STATE", nextState);
-    console.log(editorState.getCurrentContent().getBlocksAsArray());
+    console.log(editorState.getCurrentContent().get);
     setEditorState(nextState);
   };
 
@@ -29,6 +29,7 @@ export const ContentEditor: React.FC = () => {
       style={{
         width: "70%",
         background: theme?.palette.primary.light,
+        borderRadius: 5,
       }}
     >
       <div
@@ -48,8 +49,6 @@ export const ContentEditor: React.FC = () => {
       <div
         style={{
           padding: "1em",
-          minHeight: "100%",
-          height: "100%",
         }}
       >
         <Editor editorState={editorState} onChange={setEditorState} />

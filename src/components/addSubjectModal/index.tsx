@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -6,9 +6,12 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { TextField, TextareaAutosize } from "@mui/material";
+import { TextField, TextareaAutosize, IconButton, Chip } from "@mui/material";
 import { SelectCategoryInput } from "../selectCategoryInput";
 import { ContentEditor } from "../contentEditor";
+import CheckIcon from "@mui/icons-material/Check";
+import { KeywordProps, ModalSettingsProps } from "../../types";
+import { useGetPost, useSavePost } from "../../queries";
 
 const style = {
   position: "absolute" as "absolute",
@@ -17,8 +20,8 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "90%",
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
+  borderRadius: "5px",
   p: 4,
   display: "flex",
   justifyContent: "center",
@@ -27,18 +30,63 @@ const style = {
 };
 
 interface AddSubjectModalProps {
+  modalSettings: ModalSettingsProps;
   open: boolean;
   handleClose: () => unknown;
 }
+
 export const AddSubjectModal: React.FC<AddSubjectModalProps> = ({
+  modalSettings,
   open,
   handleClose,
 }) => {
+  const { data } = useGetPost(modalSettings.id);
+  // console.log("dataaa", data);
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [keywordValue, setKeywordValue] = useState("");
+  const [keywords, setKeywords] = useState<KeywordProps[]>([]);
+  const [category, setCategory] = useState<string>("");
+  const savePost = useSavePost();
+
+  useEffect(() => {
+    console.log("OUTSIDE");
+    if (data) {
+      console.log("INSIDE");
+
+      setTitle(data.title);
+      setDescription(data.description);
+      setKeywords(data.keywords);
+      setCategory(data.category);
+    }
+  }, [data]);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const newPost = {
+      title,
+      description,
+      keywords,
+      category,
+    };
+    savePost(newPost);
+    handleClose();
   };
+
+  const handleAddKeyword = () => {
+    if (keywordValue.length === 0 || keywords.length >= 10) return;
+    setKeywords((prevKeywords) => [
+      ...prevKeywords,
+      { id: `keyword-${prevKeywords.length + 1}`, keyword: keywordValue },
+    ]);
+  };
+
+  const handleDeleteKeyword = (keyword: KeywordProps) => {
+    setKeywords((prevKeywords) =>
+      prevKeywords.filter((k: KeywordProps) => k.id !== keyword.id)
+    );
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -94,22 +142,67 @@ export const AddSubjectModal: React.FC<AddSubjectModalProps> = ({
                     setTitle(e.target.value)
                   }
                 />
-                <SelectCategoryInput />
+                <SelectCategoryInput
+                  category={category}
+                  onCategoryChange={setCategory}
+                />
                 <TextareaAutosize
                   className="textArea"
                   maxRows={10}
-                  aria-label="maximum height"
-                  placeholder="Maximum 4 rows"
-                  defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-      ut labore et dolore magna aliqua."
-                  style={{ width: "100%", height: 200 }}
+                  aria-label="description"
+                  placeholder="Description"
+                  style={{ height: 200, padding: 10 }}
+                  value={description}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setDescription(e.target.value)
+                  }
                 />
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Keywords"
-                  variant="outlined"
-                />
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      id="outlined-basic"
+                      label="Keywords"
+                      variant="outlined"
+                      sx={{ width: "70%" }}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setKeywordValue(e.target.value)
+                      }
+                    />
+                    <Box>
+                      <Typography>{keywords.length}/10</Typography>
+                    </Box>
+                    <IconButton onClick={handleAddKeyword}>
+                      <CheckIcon />
+                    </IconButton>
+                  </Box>
+                  <Box
+                    sx={{
+                      minHeight: "150px",
+                      width: "100%",
+                      maxHeight: "150px",
+                      overflowY: "auto",
+                      display: "flex",
+                      alignItems: "flex-start",
+                      marginTop: "1em",
+                      gap: 1,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {keywords.map((keyword: KeywordProps) => (
+                      <Chip
+                        label={keyword.keyword}
+                        onDelete={() => handleDeleteKeyword(keyword)}
+                      />
+                    ))}
+                  </Box>
+                </Box>
               </Box>
               <ContentEditor />
             </Box>

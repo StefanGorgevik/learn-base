@@ -2,7 +2,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import React, { useState } from "react";
 import { AddSubjectModal } from "./components/addSubjectModal";
 import { Header } from "./components/header";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Posts } from "./components/posts";
 const queryClient = new QueryClient();
 
 const theme = createTheme({
@@ -16,16 +17,28 @@ const theme = createTheme({
 });
 
 function App() {
-  const [modalOpened, setModalOpened] = useState(true);
+  const [modalSettings, setModalSettings] = useState({
+    opened: false,
+    edit: false,
+    id: "",
+  });
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <div className="App">
-          <Header handleOpenModal={() => setModalOpened(true)} />
-          <AddSubjectModal
-            open={modalOpened}
-            handleClose={() => setModalOpened(false)}
+          <Header
+            handleOpenModal={() =>
+              setModalSettings({ opened: true, edit: false, id: "" })
+            }
           />
+          <AddSubjectModal
+            modalSettings={modalSettings}
+            open={modalSettings.opened}
+            handleClose={() =>
+              setModalSettings({ opened: false, edit: false, id: "" })
+            }
+          />
+          <Posts setModalSettings={setModalSettings} />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
