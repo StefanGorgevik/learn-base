@@ -12,11 +12,14 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { SelectCategoryInput } from "../../components/selectCategoryInput";
-import { ContentEditor } from "../../components/contentEditor";
+// import { ContentEditor } from "../../components/contentEditor";
 import CheckIcon from "@mui/icons-material/Check";
 import { AlertSettingsProps, KeywordProps, PostProps } from "../../types";
 import { useGetPost, useSavePost, useUpdatePost } from "../../queries";
 import { useParams } from "react-router-dom";
+import { DraftInput } from "../../components/draftEditor/draftInput";
+import { useForm } from "react-hook-form";
+import { EditorState, ContentState } from "draft-js";
 
 export const AddSubjectPage: React.FC<{
   setAlert: (alertSettings: AlertSettingsProps) => unknown;
@@ -34,26 +37,45 @@ export const AddSubjectPage: React.FC<{
   const savePost = useSavePost();
   const updatePost = useUpdatePost();
 
+  // const [editorState, setEditorState] = useState(() => {
+  //   return defaultValue
+  //     ? EditorState.createWithContent(defaultValue, decorators)
+  //     : EditorState.createEmpty(decorators);
+  // });
+
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+
+  const { handleSubmit, control } = useForm();
+  console.log("CONTROl", control);
   useEffect(() => {
     console.log("OUTSIDE", data);
     if (data) {
       console.log("INSIDE");
       setTitle(data.title);
       setDescription(data.description);
-      setKeywords(data.keywords);
+      setKeywords(data.keywords || []);
       setCategory(data.category);
       setEditing(true);
+      if (data.content) {
+        console.log("CLOBCS", data.content);
+        //load the content here
+      }
     }
   }, [data]);
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSubmitForm = (params: any) => {
+    console.log("params", params);
     const newPost: PostProps = {
       title,
       description,
       keywords,
       category,
+      content: editorState.getCurrentContent(),
     };
+    const contentState = editorState.getCurrentContent();
+    console.log("CONTENT STATE", contentState);
     let message = "Item added!";
     if (editing) {
       newPost["id"] = params?.id;
@@ -111,7 +133,7 @@ export const AddSubjectPage: React.FC<{
           {editing ? `Editing ${title}` : "Add a new subject"}
         </Typography>
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit(handleSubmitForm)}
           style={{
             width: "100%",
           }}
@@ -206,7 +228,12 @@ export const AddSubjectPage: React.FC<{
                 </Box>
               </Box>
             </Box>
-            <ContentEditor />
+            <DraftInput
+              name="content"
+              control={control}
+              editorState={editorState}
+              setEditorState={setEditorState}
+            />
           </Box>
           <Box
             sx={{
@@ -216,7 +243,7 @@ export const AddSubjectPage: React.FC<{
               gap: "1em",
             }}
           >
-            <Button variant="contained" onClick={handleSubmit}>
+            <Button variant="contained" type="submit">
               Save
             </Button>
           </Box>

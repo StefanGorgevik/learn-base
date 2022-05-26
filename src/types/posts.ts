@@ -5,5 +5,6 @@ export interface PostProps {
   description: string;
   keywords: KeywordProps[];
   category: string;
+  content?: any;
   id?: string;
 }
