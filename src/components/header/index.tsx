@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useLocation, useNavigate } from "react-router-dom";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -50,23 +52,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-interface HeaderProps {
-  handleOpenModal: () => void;
-}
+export const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log("PATHNAME", location);
+  const showBackButton =
+    location?.pathname.includes("/add") || location.pathname.includes("/edit");
 
-export const Header: React.FC<HeaderProps> = ({ handleOpenModal }) => {
+  const showAddButton = location.pathname === "/";
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            LearnBase
-          </Typography>
+          {showBackButton ? (
+            <IconButton
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "flex-start",
+              }}
+              onClick={() => navigate(-1)}
+            >
+              <ArrowBackIcon sx={{ color: "white" }} />
+            </IconButton>
+          ) : (
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            >
+              LearnBase
+            </Typography>
+          )}
           <Box
             sx={{
               display: "flex",
@@ -74,18 +92,25 @@ export const Header: React.FC<HeaderProps> = ({ handleOpenModal }) => {
               justifyContent: "space-between",
             }}
           >
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
-            <IconButton onClick={handleOpenModal} sx={{ color: "white" }}>
-              <AddBoxIcon />
-            </IconButton>
+            {showAddButton && (
+              <>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
+                <IconButton
+                  onClick={() => navigate("/add")}
+                  sx={{ color: "white" }}
+                >
+                  <AddBoxIcon />
+                </IconButton>
+              </>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

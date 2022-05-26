@@ -1,9 +1,18 @@
-import { createTheme, ThemeProvider } from "@mui/material";
-import React, { useState } from "react";
-import { AddSubjectModal } from "./components/addSubjectModal";
+import {
+  Alert,
+  Collapse,
+  createTheme,
+  IconButton,
+  ThemeProvider,
+} from "@mui/material";
+import { AddSubjectPage } from "./pages/addSubjectPage";
 import { Header } from "./components/header";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Posts } from "./components/posts";
+import { Posts } from "./pages/posts";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { AlertSettingsProps } from "./types";
 const queryClient = new QueryClient();
 
 const theme = createTheme({
@@ -16,29 +25,52 @@ const theme = createTheme({
   },
 });
 
+const initAlertData = {
+  show: false,
+  type: "",
+  text: "text",
+};
+
 function App() {
-  const [modalSettings, setModalSettings] = useState({
-    opened: false,
-    edit: false,
-    id: "",
-  });
+  const [alert, setAlert] = useState<AlertSettingsProps>(initAlertData);
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <div className="App">
-          <Header
-            handleOpenModal={() =>
-              setModalSettings({ opened: true, edit: false, id: "" })
-            }
-          />
-          <AddSubjectModal
-            modalSettings={modalSettings}
-            open={modalSettings.opened}
-            handleClose={() =>
-              setModalSettings({ opened: false, edit: false, id: "" })
-            }
-          />
-          <Posts setModalSettings={setModalSettings} />
+          <BrowserRouter>
+            <Header />
+            {alert.show && (
+              <Collapse in={alert.show}>
+                <Alert
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setAlert(initAlertData);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                >
+                  {alert.text}
+                </Alert>
+              </Collapse>
+            )}
+            <Routes>
+              <Route path="/" element={<Posts setAlert={setAlert} />} />
+              <Route
+                path="add"
+                element={<AddSubjectPage setAlert={setAlert} />}
+              />
+              <Route
+                path="edit/:id"
+                element={<AddSubjectPage setAlert={setAlert} />}
+              />
+            </Routes>
+          </BrowserRouter>
         </div>
       </ThemeProvider>
     </QueryClientProvider>

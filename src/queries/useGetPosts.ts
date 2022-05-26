@@ -16,9 +16,11 @@ export const useGetPosts = () => {
     queryFn: async () => {
       const result = await getPosts();
       let array: any = [];
-      Object.keys(result).forEach((key) => {
-        array.push({ ...result[key], id: key });
-      });
+      if (result) {
+        Object.keys(result).forEach((key) => {
+          array.push({ ...result[key], id: key });
+        });
+      }
       return array;
     },
   });

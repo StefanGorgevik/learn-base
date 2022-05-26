@@ -1,13 +1,17 @@
 import { useQuery } from "react-query";
 
 const getPost = async (id: string) => {
-  const response = await fetch(
-    `https://learn-base-86d03-default-rtdb.europe-west1.firebasedatabase.app/posts/${id}.json`
-  );
-  const result = await response.json();
-  console.log("RESULT,", result);
-
-  return result;
+  try {
+    const response = await fetch(
+      `https://learn-base-86d03-default-rtdb.europe-west1.firebasedatabase.app/posts/${id}.json`
+    );
+    const result = await response.json();
+    console.log("RESULT,", result);
+    return result;
+  } catch (e) {
+    console.log("res", e);
+    throw new Error("Error occurred!");
+  }
 };
 
 export const useGetPost = (id: string) => {
