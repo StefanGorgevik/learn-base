@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import classnames from "classnames";
+import "./index.css";
 import { EditorState, RichUtils } from "draft-js";
 import React, { useCallback, useMemo } from "react";
 import FormatItalicIcon from "@mui/icons-material/FormatItalic";
@@ -16,6 +16,8 @@ interface CreateInlineStyleButtonProp {
 export interface InlineStyleButtonProps {
   editorState: EditorState;
   setEditorState: (state: EditorState) => unknown;
+  toggleButton: (button: string) => unknown;
+  pressedButtons: string[];
 }
 
 function createInlineStyleButton({
@@ -23,14 +25,15 @@ function createInlineStyleButton({
   children,
 }: CreateInlineStyleButtonProp): React.FC<InlineStyleButtonProps> {
   return function InlineStyleButton(props) {
-    const { editorState, setEditorState } = props;
+    const { editorState, setEditorState, toggleButton, pressedButtons } = props;
 
     const toggleStyle = useCallback(
       (event: React.MouseEvent): void => {
         event.preventDefault();
         setEditorState(RichUtils.toggleInlineStyle(editorState, style));
+        toggleButton(style);
       },
-      [editorState, setEditorState]
+      [editorState, setEditorState, toggleButton]
     );
 
     const preventBubblingUp = useCallback(
@@ -38,24 +41,26 @@ function createInlineStyleButton({
       []
     );
 
-    const styleIsActive = useMemo(
-      () => editorState.getCurrentInlineStyle().has(style),
-      [editorState]
-    );
-
-    const classes = classnames(
-      "btn btn-sm",
-      styleIsActive ? "btn-success" : "btn-info"
-    );
+    const isActive = useMemo(() => {
+      const isPressed = pressedButtons.find((b) => style === b);
+      return isPressed;
+    }, [pressedButtons]);
 
     return (
-      <button
-        className={classes}
+      <div
         onClick={toggleStyle}
-        type="button"
-        children={children}
         onMouseDown={preventBubblingUp}
-      />
+        style={{
+          background: isActive ? "white" : "inherit",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "45px",
+          borderRadius: "50%",
+        }}
+      >
+        {children}
+      </div>
     );
   };
 }

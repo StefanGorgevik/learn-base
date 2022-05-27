@@ -1,31 +1,37 @@
-import { DeleteOutline } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import classnames from "classnames";
 import { EditorState, RichUtils } from "draft-js";
 import React, { useCallback, useMemo } from "react";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 interface CreateBlockStyleButtonProps {
-  blockType: string;
+  style: string;
   children: React.ReactNode;
 }
 
 export interface BlockStyleButtonProps {
   editorState: EditorState;
   setEditorState: (state: EditorState) => unknown;
+  toggleButton: (button: string) => unknown;
+  pressedButtons: string[];
 }
 
 function createBlockStyleButton({
-  blockType,
+  style,
   children,
 }: CreateBlockStyleButtonProps): React.FC<BlockStyleButtonProps> {
-  return function BlockStyleButton({ editorState, setEditorState }) {
+  return function BlockStyleButton({
+    editorState,
+    setEditorState,
+    pressedButtons,
+    toggleButton,
+  }) {
     const toggleStyle = useCallback(
       (event: React.MouseEvent): void => {
         event.preventDefault();
-        setEditorState(RichUtils.toggleBlockType(editorState, blockType));
+        setEditorState(RichUtils.toggleBlockType(editorState, style));
+        toggleButton(style);
       },
-      [editorState, setEditorState]
+      [editorState, setEditorState, toggleButton]
     );
 
     const preventBubblingUp = useCallback(
@@ -33,54 +39,48 @@ function createBlockStyleButton({
       []
     );
 
-    const blockTypeIsActive = useMemo(() => {
-      // if the button is rendered before the editor
-      if (!editorState) {
-        return false;
-      }
-
-      const type = editorState
-        .getCurrentContent()
-        .getBlockForKey(editorState.getSelection().getStartKey())
-        .getType();
-      return type === blockType;
-    }, [editorState]);
-
-    const classes = classnames(
-      "btn btn-sm",
-      blockTypeIsActive ? "btn-success" : "btn-info"
-    );
+    const isActive = useMemo(() => {
+      const isPressed = pressedButtons.find((b) => style === b);
+      return isPressed;
+    }, [pressedButtons]);
 
     return (
-      <button
-        className={classes}
+      <div
         onClick={toggleStyle}
-        type="button"
-        children={children}
         onMouseDown={preventBubblingUp}
-      />
+        style={{
+          background: isActive ? "white" : "inherit",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "45px",
+          borderRadius: "50%",
+        }}
+      >
+        {children}
+      </div>
     );
   };
 }
 
 export const H1Button = createBlockStyleButton({
-  blockType: "header-one",
+  style: "header-one",
   children: <IconButton>H1</IconButton>,
 });
 export const H2Button = createBlockStyleButton({
-  blockType: "header-two",
+  style: "header-two",
   children: <IconButton>H2</IconButton>,
 });
 export const H3Button = createBlockStyleButton({
-  blockType: "header-three",
+  style: "header-three",
   children: <IconButton>H3</IconButton>,
 });
 export const H4Button = createBlockStyleButton({
-  blockType: "header-four",
+  style: "header-four",
   children: <IconButton>H4</IconButton>,
 });
 export const BlockquoteButton = createBlockStyleButton({
-  blockType: "blockquote",
+  style: "blockquote",
   children: (
     <IconButton>
       <FormatQuoteIcon />
@@ -88,7 +88,7 @@ export const BlockquoteButton = createBlockStyleButton({
   ),
 });
 export const UnorderedListButton = createBlockStyleButton({
-  blockType: "unordered-list-item",
+  style: "unordered-list-item",
   children: (
     <IconButton>
       <FormatListBulletedIcon />

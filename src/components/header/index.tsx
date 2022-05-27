@@ -55,7 +55,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("PATHNAME", location);
   const showBackButton =
     location?.pathname.includes("/add") || location.pathname.includes("/edit");
 

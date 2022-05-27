@@ -33,6 +33,7 @@ export const DraftInput: React.FC<DraftInputProps> = (props) => {
     ),
     [field, onChange, defaultValue, editorState, setEditorState]
   );
+
   return (
     <div
       style={{

@@ -3,7 +3,7 @@ import "draft-js/dist/Draft.css";
 import { usePreviousValue } from "beautiful-react-hooks";
 import { ContentBlock, ContentState, Editor, EditorState } from "draft-js";
 import * as Immutable from "immutable";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   BlockquoteButton,
@@ -39,7 +39,7 @@ export interface DraftEditorProps {
 
 export const DraftEditor: React.FC<DraftEditorProps> = (props) => {
   const { onChange, onBlur, editorState, setEditorState } = props;
-
+  const [pressedButtons, setPressedButtons] = useState<string[]>([]);
   const prevState = usePreviousValue(editorState);
 
   useEffect(() => {
@@ -48,10 +48,35 @@ export const DraftEditor: React.FC<DraftEditorProps> = (props) => {
     }
   }, [editorState, onChange, prevState]);
 
+  const toggleButton = useCallback((button: string) => {
+    setPressedButtons((prevPressed) => {
+      const isButton = prevPressed.find((b) => b === button);
+      const isHeader = prevPressed.some((b) => b.includes("header"));
+      if (isHeader && button.includes("header")) {
+        let newArr = prevPressed.filter((b) => !b.includes("header"));
+        newArr = [...newArr, button];
+        return newArr;
+      }
+      if (isButton) {
+        return prevPressed.filter((b) => b !== button);
+      } else {
+        return [...prevPressed, button];
+      }
+    });
+  }, []);
+
   const styleButtonProps = useMemo(
-    () => ({ editorState, setEditorState }),
-    [editorState, setEditorState]
+    () => ({
+      editorState,
+      setEditorState,
+      pressedButtons,
+      toggleButton,
+    }),
+    [editorState, setEditorState, pressedButtons, toggleButton]
   );
+
+  console.log("editor state", editorState);
+  console.log("editor state22", editorState.getCurrentInlineStyle());
   return (
     <div>
       <div

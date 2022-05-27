@@ -1,4 +1,5 @@
 import { UseMutateFunction, useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { PostProps } from "../types";
 
 const savePost = async (postData: any) => {
@@ -21,6 +22,7 @@ export const useSavePost = (): UseMutateFunction<
   unknown
 > => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { mutate } = useMutation(
     async (postData: PostProps) => {
       return await savePost(postData);
@@ -28,6 +30,7 @@ export const useSavePost = (): UseMutateFunction<
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["posts"]);
+        navigate("/");
       },
     }
   );

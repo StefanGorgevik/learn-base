@@ -19,15 +19,13 @@ import { useGetPost, useSavePost, useUpdatePost } from "../../queries";
 import { useParams } from "react-router-dom";
 import { DraftInput } from "../../components/draftEditor/draftInput";
 import { useForm } from "react-hook-form";
-import { EditorState, ContentState } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 
 export const AddSubjectPage: React.FC<{
   setAlert: (alertSettings: AlertSettingsProps) => unknown;
 }> = ({ setAlert }) => {
   const params = useParams();
-  console.log("params", params);
   const { data, isLoading } = useGetPost(params?.id || "");
-  // console.log("dataaa", data);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [keywordValue, setKeywordValue] = useState("");
@@ -37,45 +35,35 @@ export const AddSubjectPage: React.FC<{
   const savePost = useSavePost();
   const updatePost = useUpdatePost();
 
-  // const [editorState, setEditorState] = useState(() => {
-  //   return defaultValue
-  //     ? EditorState.createWithContent(defaultValue, decorators)
-  //     : EditorState.createEmpty(decorators);
-  // });
-
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
 
   const { handleSubmit, control } = useForm();
-  console.log("CONTROl", control);
   useEffect(() => {
-    console.log("OUTSIDE", data);
     if (data) {
-      console.log("INSIDE");
       setTitle(data.title);
       setDescription(data.description);
       setKeywords(data.keywords || []);
       setCategory(data.category);
       setEditing(true);
       if (data.content) {
-        console.log("CLOBCS", data.content);
-        //load the content here
+        const obj = { ...data.content, entityMap: {} };
+        const contentState = convertFromRaw(obj);
+        setEditorState(EditorState.createWithContent(contentState));
       }
     }
   }, [data]);
 
   const handleSubmitForm = (params: any) => {
-    console.log("params", params);
+    const contentState = convertToRaw(editorState.getCurrentContent());
     const newPost: PostProps = {
       title,
       description,
       keywords,
       category,
-      content: editorState.getCurrentContent(),
+      content: contentState,
     };
-    const contentState = editorState.getCurrentContent();
-    console.log("CONTENT STATE", contentState);
     let message = "Item added!";
     if (editing) {
       newPost["id"] = params?.id;
@@ -107,6 +95,7 @@ export const AddSubjectPage: React.FC<{
 
   const handleKeywordEnterPress = (e: any) => {
     if (e.keyCode === 13) {
+      setKeywordValue("");
       handleAddKeyword();
     }
   };
@@ -126,7 +115,7 @@ export const AddSubjectPage: React.FC<{
       <Box>
         <Typography
           id="transition-modal-title"
-          variant="h6"
+          variant="h4"
           component="h2"
           sx={{ marginBottom: "1em" }}
         >

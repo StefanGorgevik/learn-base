@@ -7,7 +7,7 @@ const updatePost = async (postData: PostProps) => {
   const response = await fetch(
     `https://learn-base-86d03-default-rtdb.europe-west1.firebasedatabase.app/posts/${id}.json`,
     {
-      method: "PUT",
+      method: "PATCH",
       body: JSON.stringify(postData),
     }
   );

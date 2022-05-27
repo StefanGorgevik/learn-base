@@ -32,7 +32,6 @@ export const Posts: React.FC<{
   const [deleteModalSettings, setDeleteModalSettings] =
     useState<DeleteModalSettingsProps>(initialModalSettings);
   const navigate = useNavigate();
-  console.log("data POSTS", data, isLoading);
 
   const handleDeletePost = async () => {
     if (deleteModalSettings.open && deleteModalSettings.item.id) {
@@ -54,12 +53,6 @@ export const Posts: React.FC<{
     );
   }
 
-  console.log(
-    "IS LOADINGGG",
-    isLoading,
-    data,
-    data && data.length === 0 && !isLoading
-  );
   if (data && data.length === 0 && !isLoading) {
     return (
       <Grid container justifyContent="center" sx={{ marginTop: 10 }}>

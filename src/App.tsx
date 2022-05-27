@@ -1,8 +1,8 @@
 import {
   Alert,
-  Collapse,
   createTheme,
   IconButton,
+  Snackbar,
   ThemeProvider,
 } from "@mui/material";
 import { AddSubjectPage } from "./pages/addSubjectPage";
@@ -40,7 +40,12 @@ function App() {
           <BrowserRouter>
             <Header />
             {alert.show && (
-              <Collapse in={alert.show}>
+              <Snackbar
+                open={alert.show}
+                autoHideDuration={5000}
+                onClose={() => setAlert(initAlertData)}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              >
                 <Alert
                   action={
                     <IconButton
@@ -57,7 +62,7 @@ function App() {
                 >
                   {alert.text}
                 </Alert>
-              </Collapse>
+              </Snackbar>
             )}
             <Routes>
               <Route path="/" element={<Posts setAlert={setAlert} />} />
