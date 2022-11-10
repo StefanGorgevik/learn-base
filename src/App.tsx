@@ -13,6 +13,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { AlertSettingsProps } from "./types";
+import { ViewSubject } from "./pages/viewSubject";
 const queryClient = new QueryClient();
 
 const theme = createTheme({
@@ -33,12 +34,14 @@ const initAlertData = {
 
 function App() {
   const [alert, setAlert] = useState<AlertSettingsProps>(initAlertData);
+  const [editing, setEditing] = useState<boolean>(false);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <div className="App">
           <BrowserRouter>
-            <Header />
+            <Header editing={editing} setEditing={setEditing} />
             {alert.show && (
               <Snackbar
                 open={alert.show}
@@ -68,12 +71,25 @@ function App() {
               <Route path="/" element={<Posts setAlert={setAlert} />} />
               <Route
                 path="add"
-                element={<AddSubjectPage setAlert={setAlert} />}
+                element={
+                  <AddSubjectPage
+                    setAlert={setAlert}
+                    editing={editing}
+                    setEditing={setEditing}
+                  />
+                }
               />
               <Route
                 path="edit/:id"
-                element={<AddSubjectPage setAlert={setAlert} />}
+                element={
+                  <AddSubjectPage
+                    setAlert={setAlert}
+                    editing={editing}
+                    setEditing={setEditing}
+                  />
+                }
               />
+              <Route path="view/:id" element={<ViewSubject />} />
             </Routes>
           </BrowserRouter>
         </div>

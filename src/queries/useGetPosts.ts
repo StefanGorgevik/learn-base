@@ -2,13 +2,33 @@ import { useQuery } from "react-query";
 
 const getPosts = async () => {
   const response = await fetch(
-    "https://learn-base-86d03-default-rtdb.europe-west1.firebasedatabase.app/posts.json"
+    "https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/main-posts/"
   );
   const result = await response.json();
-  console.log(result);
 
   return result;
 };
+
+interface ResponsePostProps {
+  category: {
+    stringValue: string;
+  };
+  description: {
+    stringValue: string;
+  };
+  title: {
+    stringValue: string;
+  };
+  contents: {
+    stringValue: string;
+  };
+}
+interface PostsResponseProps {
+  name: string;
+  createTime: string;
+  updateTime: string;
+  fields: ResponsePostProps;
+}
 
 export const useGetPosts = () => {
   return useQuery({
@@ -16,10 +36,16 @@ export const useGetPosts = () => {
     queryFn: async () => {
       const result = await getPosts();
       let array: any = [];
-      if (result) {
-        Object.keys(result).forEach((key) => {
-          array.push({ ...result[key], id: key });
-        });
+      if (result?.documents) {
+        result?.documents.forEach((item: PostsResponseProps) =>
+          array.push({
+            category: item.fields.category.stringValue,
+            title: item.fields.title.stringValue,
+            description: item?.fields.description.stringValue,
+            contents: JSON.parse(item?.fields.contents.stringValue),
+            name: item.name,
+          })
+        );
       }
       return array;
     },

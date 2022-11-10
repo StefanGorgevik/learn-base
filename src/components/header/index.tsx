@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useMemo } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -52,13 +52,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const Header: React.FC = () => {
+export const Header: React.FC<{
+  editing: boolean;
+  setEditing: (editing: boolean) => void;
+}> = ({ editing, setEditing }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const showBackButton =
-    location?.pathname.includes("/add") || location.pathname.includes("/edit");
+  const { pathname } = useLocation();
+  const showBackButton = useMemo(() => {
+    if (!pathname) {
+      return false;
+    } else {
+      return (
+        pathname.includes("/add") ||
+        pathname.includes("/edit") ||
+        pathname.includes("/view")
+      );
+    }
+  }, [pathname]);
 
-  const showAddButton = location.pathname === "/";
+  const showAddButton = useMemo(() => {
+    if (!pathname) {
+      return false;
+    } else {
+      return pathname === "/";
+    }
+  }, [pathname]);
+
+  const handleBackClick = () => {
+    navigate(-1);
+    if (editing && pathname.includes("edit")) {
+      setEditing(false);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -69,10 +95,21 @@ export const Header: React.FC = () => {
                 flexGrow: 1,
                 display: "flex",
                 justifyContent: "flex-start",
+                alignItems: "center",
+                gap: "1rem",
               }}
-              onClick={() => navigate(-1)}
+              onClick={handleBackClick}
             >
               <ArrowBackIcon sx={{ color: "white" }} />
+              {!pathname.includes("view") && (
+                <Typography
+                  id="transition-modal-title"
+                  variant="h6"
+                  color="white"
+                >
+                  {editing ? `Editing` : "Add a new subject"}
+                </Typography>
+              )}
             </IconButton>
           ) : (
             <Typography
@@ -80,6 +117,7 @@ export const Header: React.FC = () => {
               noWrap
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              data-testid="header-title"
             >
               LearnBase
             </Typography>

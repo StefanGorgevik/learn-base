@@ -2,12 +2,20 @@ import { UseMutateFunction, useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { PostProps } from "../types";
 
-const savePost = async (postData: any) => {
+const savePost = async (postData: PostProps) => {
   const response = await fetch(
-    "https://learn-base-86d03-default-rtdb.europe-west1.firebasedatabase.app/posts.json",
+    "https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/main-posts/",
     {
       method: "POST",
-      body: JSON.stringify(postData),
+      body: JSON.stringify({
+        fields: {
+          title: { stringValue: postData.title },
+          description: { stringValue: postData.description },
+          contents: { stringValue: JSON.stringify(postData.contents) },
+          category: { stringValue: postData.category },
+          keywords: { stringValue: JSON.stringify(postData.keywords) },
+        },
+      }),
     }
   );
 

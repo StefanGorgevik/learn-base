@@ -5,10 +5,18 @@ const updatePost = async (postData: PostProps) => {
   const id = postData.id;
   delete postData.id;
   const response = await fetch(
-    `https://learn-base-86d03-default-rtdb.europe-west1.firebasedatabase.app/posts/${id}.json`,
+    `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/main-posts/${id}`,
     {
       method: "PATCH",
-      body: JSON.stringify(postData),
+      body: JSON.stringify({
+        fields: {
+          title: { stringValue: postData.title },
+          description: { stringValue: postData.description },
+          contents: { stringValue: JSON.stringify(postData.contents) },
+          category: { stringValue: postData.category },
+          keywords: { stringValue: JSON.stringify(postData.keywords) },
+        },
+      }),
     }
   );
 

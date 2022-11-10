@@ -7,11 +7,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { CategoryProps } from "../../types";
 
 const CATEGORIES: CategoryProps[] = [
-  { id: "history", name: "History" },
   { id: "javascript", name: "Javascript" },
   { id: "react", name: "React" },
-  { id: "it", name: "IT" },
-  { id: "music", name: "Music" },
+  { id: "typescript", name: "Typescript" },
+  { id: "html/css", name: "HTML/CSS" },
 ];
 
 interface SelectCategoryInputProps {

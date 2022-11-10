@@ -52,7 +52,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = (props) => {
     setPressedButtons((prevPressed) => {
       const isButton = prevPressed.find((b) => b === button);
       const isHeader = prevPressed.some((b) => b.includes("header"));
-      if (isHeader && button.includes("header")) {
+      if (isHeader && button.includes("header") && !isButton) {
         let newArr = prevPressed.filter((b) => !b.includes("header"));
         newArr = [...newArr, button];
         return newArr;
@@ -75,8 +75,6 @@ export const DraftEditor: React.FC<DraftEditorProps> = (props) => {
     [editorState, setEditorState, pressedButtons, toggleButton]
   );
 
-  console.log("editor state", editorState);
-  console.log("editor state22", editorState.getCurrentInlineStyle());
   return (
     <div>
       <div
@@ -98,7 +96,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = (props) => {
         <BlockquoteButton {...styleButtonProps} />
         <UnorderedListButton {...styleButtonProps} />
       </div>
-      <div style={{ padding: 15 }}>
+      <div style={{ padding: 15, minHeight: '100%' }}>
         <Editor
           blockRendererFn={customBlockRenderer}
           customStyleMap={styleMap}

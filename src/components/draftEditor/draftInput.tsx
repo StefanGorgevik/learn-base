@@ -1,12 +1,12 @@
 import { useTheme } from "@mui/material";
-import { ContentState, convertFromRaw, convertToRaw } from "draft-js";
+import { ContentState, convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import React, { useCallback, useMemo } from "react";
 import { useController, UseControllerProps } from "react-hook-form";
 import { DraftEditor } from "./editor";
 
 interface DraftInputProps extends UseControllerProps {
-  editorState: any;
-  setEditorState: any;
+  editorState: EditorState;
+  setEditorState: (editorState: EditorState) => void;
 }
 
 export const DraftInput: React.FC<DraftInputProps> = (props) => {
@@ -37,7 +37,8 @@ export const DraftInput: React.FC<DraftInputProps> = (props) => {
   return (
     <div
       style={{
-        width: "70%",
+        width: "100%",
+        minHeight: '500px',
         background: theme?.palette.primary.light,
         borderRadius: 5,
       }}

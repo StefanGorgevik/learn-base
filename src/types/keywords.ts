@@ -1,4 +1,1 @@
-export interface KeywordProps {
-  id: string;
-  keyword: string;
-}
+export type Keyword = string;

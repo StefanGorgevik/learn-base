@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { DeleteModal } from "../../components/deleteModal";
 import { AlertSettingsProps, DeleteModalSettingsProps } from "../../types";
-
+import PreviewIcon from "@mui/icons-material/Preview";
 const initialModalSettings: DeleteModalSettingsProps = {
   open: false,
   item: {
@@ -53,7 +53,7 @@ export const Posts: React.FC<{
     );
   }
 
-  if (data && data.length === 0 && !isLoading) {
+  if ((data && data.length === 0 && !isLoading) || !data) {
     return (
       <Grid container justifyContent="center" sx={{ marginTop: 10 }}>
         <Grid item>
@@ -72,8 +72,8 @@ export const Posts: React.FC<{
         />
       )}
       <Grid container spacing={3} padding={5}>
-        {data.map((item: any) => (
-          <Grid item key={item.id}>
+        {data?.map((item: any) => (
+          <Grid item key={item.name}>
             <Card
               sx={{
                 width: 300,
@@ -91,7 +91,7 @@ export const Posts: React.FC<{
                     setDeleteModalSettings({
                       open: true,
                       item: {
-                        id: item.id,
+                        id: item.name.substr(item.name.lastIndexOf("/")+ 1),
                         titleToDelete: item.title,
                       },
                     })
@@ -101,9 +101,23 @@ export const Posts: React.FC<{
                 </IconButton>
                 <IconButton
                   aria-label="share"
-                  onClick={() => navigate(`/edit/${item.id}`)}
+                  onClick={() =>
+                    navigate(
+                      `/edit${item.name.substr(item.name.lastIndexOf("/"))}`
+                    )
+                  }
                 >
                   <EditIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="share"
+                  onClick={() =>
+                    navigate(
+                      `/view${item.name.substr(item.name.lastIndexOf("/"))}`
+                    )
+                  }
+                >
+                  <PreviewIcon />
                 </IconButton>
               </CardActions>
             </Card>

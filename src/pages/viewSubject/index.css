@@ -1,0 +1,55 @@
+.gist {
+    width: 100% !important;
+}
+
+.gist-div {
+    margin: 5px !important;
+}
+
+.gist-meta {
+    display: none !important;
+}
+
+.gist-file {
+    border: none !important;
+    padding: 1% !important;
+    padding-bottom: 0 !important;
+    width: 100% !important;
+    margin-bottom: 5px !important;
+}
+
+.gist-data {
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 1% !important;
+    background-color: #354259 !important;
+}
+
+.gist-data tbody{
+    background-color: #354259 !important;
+    border: none !important;
+    color: white !important;
+    padding: 5% !important;
+    padding-bottom: 0 !important;
+    min-width: 100% !important;
+}
+.gist-data tbody tr td {
+    font-family: 'Cormorant Garamond', serif;
+    border: none !important;
+    color: white !important;
+    font-size: 14px !important;
+}
+.gist-data table tbody tr td td{
+    padding: 5% !important;
+}
+.gist-data table tbody .blob-num{
+    display: none !important;
+}
+.include-grid {
+    border-radius: 10px;
+    width: 100%;
+}
+
+.prose-div {
+    padding-left: 1rem;
+}

@@ -1,10 +1,11 @@
-import { KeywordProps } from "./keywords";
+import { AllEditorContentsProps } from "./editorTypes";
+import { Keyword } from "./keywords";
 
 export interface PostProps {
   title: string;
   description: string;
-  keywords: KeywordProps[];
+  keywords: Keyword[];
   category: string;
-  content?: any;
+  contents?: AllEditorContentsProps[];
   id?: string;
 }
