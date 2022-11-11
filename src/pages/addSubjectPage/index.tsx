@@ -16,7 +16,6 @@ import { SelectCategoryInput } from "../../components/selectCategoryInput";
 // import { ContentEditor } from "../../components/contentEditor";
 import CheckIcon from "@mui/icons-material/Check";
 import {
-  AlertSettingsProps,
   AllEditorContentsProps,
   DeleteModalSettingsProps,
   EditorStateProps,
@@ -27,11 +26,7 @@ import { useGetPost, useSavePost, useUpdatePost } from "../../queries";
 import { useParams } from "react-router-dom";
 import { DraftInput } from "../../components/draftEditor/draftInput";
 import { useForm } from "react-hook-form";
-import {
-  EditorState,
-  convertToRaw,
-  convertFromRaw,
-} from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { isEmpty, map, uniqueId } from "lodash-es";
 import Paper from "@mui/material/Paper";
 import { styled, useTheme } from "@mui/material/styles";
@@ -39,6 +34,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteModal } from "../../components/deleteModal";
 import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
+import { useMainContext } from "../../contexts/MainContext";
 
 const initialCurrentEditorState: EditorStateProps = {
   id: "",
@@ -68,18 +64,15 @@ const initialModalSettings: DeleteModalSettingsProps = {
   },
 };
 
-export const AddSubjectPage: React.FC<{
-  setAlert: (alertSettings: AlertSettingsProps) => unknown;
-  setEditing: (editing: boolean) => unknown;
-  editing: boolean;
-}> = ({ setAlert, setEditing, editing }) => {
+export const AddSubjectPage: React.FC = () => {
+  const { setAlert, setEditing, editing, currentCollection } = useMainContext();
   const { id } = useParams();
-  const { data, isLoading } = useGetPost(id || "");
+  const { data, isLoading } = useGetPost(id || "", currentCollection);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [keywordValue, setKeywordValue] = useState("");
   const [keywords, setKeywords] = useState<Keyword[]>([]);
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState<string>("javascript");
   const [isEditingContent, setIsEditingContent] = useState(false);
   const [deleteModalSettings, setDeleteModalSettings] =
     useState<DeleteModalSettingsProps>(initialModalSettings);

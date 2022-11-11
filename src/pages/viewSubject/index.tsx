@@ -6,10 +6,12 @@ import { useGetPost } from "../../queries";
 import { useParams } from "react-router-dom";
 import { Prose } from "../../components/prose";
 import Gist from "super-react-gist";
+import { useCurrentCollection } from "../../contexts/MainContext";
 
 export const ViewSubject: React.FC = () => {
+  const {currentCollection} = useCurrentCollection();
   const params = useParams();
-  const { data, isLoading } = useGetPost(params?.id || "");
+  const { data, isLoading } = useGetPost(params?.id || "", currentCollection);
 
   if (isLoading) {
     return (

@@ -5,7 +5,7 @@ const updatePost = async (postData: PostProps) => {
   const id = postData.id;
   delete postData.id;
   const response = await fetch(
-    `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/main-posts/${id}`,
+    `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/${postData.category}/${id}`,
     {
       method: "PATCH",
       body: JSON.stringify({

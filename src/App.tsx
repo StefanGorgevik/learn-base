@@ -10,10 +10,9 @@ import { Header } from "./components/header";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Posts } from "./pages/posts";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { AlertSettingsProps } from "./types";
 import { ViewSubject } from "./pages/viewSubject";
+import { initAlertData, useAlert } from "./contexts/MainContext";
 const queryClient = new QueryClient();
 
 const theme = createTheme({
@@ -23,25 +22,22 @@ const theme = createTheme({
       light: "#C2DED1",
       dark: "#4C0027",
     },
+    secondary: {
+      main: "#C2DED1",
+      light: "#C2DED1",
+      dark: "#4C0027",
+    },
   },
 });
 
-const initAlertData = {
-  show: false,
-  type: "",
-  text: "text",
-};
-
-function App() {
-  const [alert, setAlert] = useState<AlertSettingsProps>(initAlertData);
-  const [editing, setEditing] = useState<boolean>(false);
-
+const App = () => {
+  const { alert, setAlert } = useAlert();
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <div className="App">
           <BrowserRouter>
-            <Header editing={editing} setEditing={setEditing} />
+            <Header />
             {alert.show && (
               <Snackbar
                 open={alert.show}
@@ -68,27 +64,9 @@ function App() {
               </Snackbar>
             )}
             <Routes>
-              <Route path="/" element={<Posts setAlert={setAlert} />} />
-              <Route
-                path="add"
-                element={
-                  <AddSubjectPage
-                    setAlert={setAlert}
-                    editing={editing}
-                    setEditing={setEditing}
-                  />
-                }
-              />
-              <Route
-                path="edit/:id"
-                element={
-                  <AddSubjectPage
-                    setAlert={setAlert}
-                    editing={editing}
-                    setEditing={setEditing}
-                  />
-                }
-              />
+              <Route path="/" element={<Posts />} />
+              <Route path="add" element={<AddSubjectPage />} />
+              <Route path="edit/:id" element={<AddSubjectPage />} />
               <Route path="view/:id" element={<ViewSubject />} />
             </Routes>
           </BrowserRouter>
@@ -96,6 +74,6 @@ function App() {
       </ThemeProvider>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;

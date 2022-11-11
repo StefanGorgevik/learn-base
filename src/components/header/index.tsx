@@ -10,6 +10,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Tab, Tabs } from "@mui/material";
+import { useMainContext } from "../../contexts/MainContext";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -52,10 +55,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const Header: React.FC<{
-  editing: boolean;
-  setEditing: (editing: boolean) => void;
-}> = ({ editing, setEditing }) => {
+export const Header: React.FC = () => {
+  const { editing, setEditing, currentCollection, setCurrentCollection } =
+    useMainContext();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const showBackButton = useMemo(() => {
@@ -125,12 +127,44 @@ export const Header: React.FC<{
           <Box
             sx={{
               display: "flex",
-              width: "50%",
+              width: "70%",
               justifyContent: "space-between",
             }}
           >
             {showAddButton && (
               <>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <Tabs
+                    value={currentCollection}
+                    onChange={(currentTarget, target) => {
+                      setCurrentCollection(target);
+                    }}
+                    textColor="inherit"
+                    indicatorColor="secondary"
+                    aria-label="secondary tabs example"
+                  >
+                    <Tab
+                      value="javascript"
+                      label="Javascript"
+                      style={{ color: "#98a19d" }}
+                    />
+                    <Tab
+                      value="react"
+                      label="React"
+                      style={{ color: "#98a19d" }}
+                    />
+                    <Tab
+                      value="typescript"
+                      label="Typescript"
+                      style={{ color: "#98a19d" }}
+                    />
+                    <Tab
+                      value="htmlcss"
+                      label="HTML/CSS"
+                      style={{ color: "#98a19d" }}
+                    />
+                  </Tabs>
+                </Box>
                 <Search>
                   <SearchIconWrapper>
                     <SearchIcon />

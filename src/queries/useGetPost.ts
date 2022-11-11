@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
 
-const getPost = async (id: string) => {
+const getPost = async (id: string, currentCollection: string) => {
   try {
     const response = await fetch(
-      `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/main-posts/${id}`
+      `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/${currentCollection}/${id}`
     );
     const result = await response.json();
     return {
@@ -21,14 +21,14 @@ const getPost = async (id: string) => {
   }
 };
 
-export const useGetPost = (id: string) => {
+export const useGetPost = (id: string, currentCollection: string) => {
   return useQuery({
     queryKey: ["post", id],
     queryFn: async () => {
       if (!id) {
         return null;
       }
-      const result = await getPost(id);
+      const result = await getPost(id, currentCollection);
       return result;
     },
   });

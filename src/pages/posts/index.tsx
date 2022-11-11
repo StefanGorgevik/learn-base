@@ -14,8 +14,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { DeleteModal } from "../../components/deleteModal";
-import { AlertSettingsProps, DeleteModalSettingsProps } from "../../types";
+import { DeleteModalSettingsProps } from "../../types";
 import PreviewIcon from "@mui/icons-material/Preview";
+import { useMainContext } from "../../contexts/MainContext";
 const initialModalSettings: DeleteModalSettingsProps = {
   open: false,
   item: {
@@ -24,11 +25,10 @@ const initialModalSettings: DeleteModalSettingsProps = {
   },
 };
 
-export const Posts: React.FC<{
-  setAlert: (alertSettings: AlertSettingsProps) => unknown;
-}> = ({ setAlert }) => {
-  const { data, isLoading } = useGetPosts();
-  const { mutate } = useDeletePost();
+export const Posts: React.FC = () => {
+  const { setAlert, currentCollection } = useMainContext();
+  const { data, isLoading } = useGetPosts(currentCollection);
+  const { mutate } = useDeletePost(currentCollection);
   const [deleteModalSettings, setDeleteModalSettings] =
     useState<DeleteModalSettingsProps>(initialModalSettings);
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ export const Posts: React.FC<{
                     setDeleteModalSettings({
                       open: true,
                       item: {
-                        id: item.name.substr(item.name.lastIndexOf("/")+ 1),
+                        id: item.name.substr(item.name.lastIndexOf("/") + 1),
                         titleToDelete: item.title,
                       },
                     })

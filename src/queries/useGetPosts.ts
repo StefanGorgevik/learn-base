@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
-const getPosts = async () => {
+const getPosts = async (currentCollection: string) => {
   const response = await fetch(
-    "https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/main-posts/"
+    `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/${currentCollection}/`
   );
   const result = await response.json();
 
@@ -30,11 +30,11 @@ interface PostsResponseProps {
   fields: ResponsePostProps;
 }
 
-export const useGetPosts = () => {
+export const useGetPosts = (currentCollection: string) => {
   return useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", currentCollection],
     queryFn: async () => {
-      const result = await getPosts();
+      const result = await getPosts(currentCollection);
       let array: any = [];
       if (result?.documents) {
         result?.documents.forEach((item: PostsResponseProps) =>

@@ -10,7 +10,7 @@ const CATEGORIES: CategoryProps[] = [
   { id: "javascript", name: "Javascript" },
   { id: "react", name: "React" },
   { id: "typescript", name: "Typescript" },
-  { id: "html/css", name: "HTML/CSS" },
+  { id: "htmlcss", name: "HTML/CSS" },
 ];
 
 interface SelectCategoryInputProps {
@@ -36,9 +36,10 @@ export const SelectCategoryInput: React.FC<SelectCategoryInputProps> = ({
           value={category}
           label="Category"
           onChange={handleChange}
+          required
         >
           {CATEGORIES.map((cat: CategoryProps) => (
-            <MenuItem key={cat.id} value={cat.name}>
+            <MenuItem key={cat.id} value={cat.id}>
               {cat.name}
             </MenuItem>
           ))}
