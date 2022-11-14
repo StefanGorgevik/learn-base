@@ -1,5 +1,6 @@
 import { UseMutateFunction, useMutation, useQueryClient } from "react-query";
 import { PostProps } from "../types";
+import { transformKeywords } from "../utils/keywords";
 
 const updatePost = async (postData: PostProps) => {
   const id = postData.id;
@@ -14,7 +15,7 @@ const updatePost = async (postData: PostProps) => {
           description: { stringValue: postData.description },
           contents: { stringValue: JSON.stringify(postData.contents) },
           category: { stringValue: postData.category },
-          keywords: { stringValue: JSON.stringify(postData.keywords) },
+          keywords: transformKeywords(postData.keywords),
         },
       }),
     }

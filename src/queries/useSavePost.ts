@@ -1,6 +1,7 @@
 import { UseMutateFunction, useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { PostProps } from "../types";
+import { transformKeywords } from "../utils/keywords";
 
 const savePost = async (postData: PostProps) => {
   const response = await fetch(
@@ -13,7 +14,7 @@ const savePost = async (postData: PostProps) => {
           description: { stringValue: postData.description },
           contents: { stringValue: JSON.stringify(postData.contents) },
           category: { stringValue: postData.category },
-          keywords: { stringValue: JSON.stringify(postData.keywords) },
+          keywords: transformKeywords(postData.keywords),
         },
       }),
     }

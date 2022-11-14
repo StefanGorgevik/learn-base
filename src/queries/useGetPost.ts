@@ -1,4 +1,13 @@
 import { useQuery } from "react-query";
+import { getKeywordsFromResponse } from "../utils/keywords";
+
+// interface KeywordsResponseProps {
+//   arrayValue: {
+//     values: {
+//       stringValue: string;
+//     }[];
+//   };
+// }
 
 const getPost = async (id: string, currentCollection: string) => {
   try {
@@ -12,11 +21,12 @@ const getPost = async (id: string, currentCollection: string) => {
       description: result.fields.description.stringValue,
       contents: JSON.parse(result.fields.contents.stringValue),
       name: result.name,
-      keywords: result?.fields?.keywords?.stringValue
-        ? JSON.parse(result.fields.keywords.stringValue)
+      keywords: result?.fields?.keywords?.arrayValue?.values
+        ? getKeywordsFromResponse(result.fields.keywords.arrayValue.values)
         : [],
     };
   } catch (e) {
+    console.log("e", e);
     throw new Error("Error occurred!");
   }
 };

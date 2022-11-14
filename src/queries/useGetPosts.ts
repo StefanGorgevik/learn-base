@@ -9,7 +9,7 @@ const getPosts = async (currentCollection: string) => {
   return result;
 };
 
-interface ResponsePostProps {
+export interface ResponsePostProps {
   category: {
     stringValue: string;
   };
@@ -23,7 +23,7 @@ interface ResponsePostProps {
     stringValue: string;
   };
 }
-interface PostsResponseProps {
+export interface PostsResponseProps {
   name: string;
   createTime: string;
   updateTime: string;
@@ -42,7 +42,6 @@ export const useGetPosts = (currentCollection: string) => {
             category: item.fields.category.stringValue,
             title: item.fields.title.stringValue,
             description: item?.fields.description.stringValue,
-            contents: JSON.parse(item?.fields.contents.stringValue),
             name: item.name,
           })
         );
