@@ -1,7 +1,7 @@
 export interface DeleteModalSettingsProps {
   open: boolean;
   item: {
-    id: string;
+    id?: string;
     titleToDelete: string;
   };
 }

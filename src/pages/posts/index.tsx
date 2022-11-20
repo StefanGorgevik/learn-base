@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { DeleteModal } from "../../components/deleteModal";
-import { DeleteModalSettingsProps } from "../../types";
+import { DeleteModalSettingsProps, PostProps } from "../../types";
 import PreviewIcon from "@mui/icons-material/Preview";
 import { useMainContext } from "../../contexts/MainContext";
 const initialModalSettings: DeleteModalSettingsProps = {
@@ -28,6 +28,7 @@ const initialModalSettings: DeleteModalSettingsProps = {
 export const Posts: React.FC = () => {
   const { setAlert, currentCollection } = useMainContext();
   const { data, isLoading } = useGetPosts(currentCollection);
+  console.log("data", data, isLoading);
   const { mutate } = useDeletePost(currentCollection);
   const [deleteModalSettings, setDeleteModalSettings] =
     useState<DeleteModalSettingsProps>(initialModalSettings);
@@ -53,7 +54,8 @@ export const Posts: React.FC = () => {
     );
   }
 
-  if ((data && data.length === 0 && !isLoading) || !data) {
+  console.log("data POSTS", data);
+  if ((data?.length === 0 && !isLoading) || !data) {
     return (
       <Grid container justifyContent="center" sx={{ marginTop: 10 }}>
         <Grid item>
@@ -72,7 +74,7 @@ export const Posts: React.FC = () => {
         />
       )}
       <Grid container spacing={3} padding={5}>
-        {data?.map((item: any) => (
+        {data?.map((item: PostProps) => (
           <Grid item key={item.name}>
             <Card
               sx={{
@@ -91,7 +93,7 @@ export const Posts: React.FC = () => {
                     setDeleteModalSettings({
                       open: true,
                       item: {
-                        id: item.name.substr(item.name.lastIndexOf("/") + 1),
+                        id: item?.id,
                         titleToDelete: item.title,
                       },
                     })
@@ -101,21 +103,18 @@ export const Posts: React.FC = () => {
                 </IconButton>
                 <IconButton
                   aria-label="share"
-                  onClick={() =>
-                    navigate(
-                      `/edit${item.name.substr(item.name.lastIndexOf("/"))}`
-                    )
-                  }
+                  onClick={() => {
+                    if (item.id) {
+                      console.log("DATA POSTS", item?.id);
+                    }
+                    navigate(`/edit/${item.id?.trim()}`);
+                  }}
                 >
                   <EditIcon />
                 </IconButton>
                 <IconButton
                   aria-label="share"
-                  onClick={() =>
-                    navigate(
-                      `/view${item.name.substr(item.name.lastIndexOf("/"))}`
-                    )
-                  }
+                  onClick={() => navigate(`/view/${item.id}`)}
                 >
                   <PreviewIcon />
                 </IconButton>

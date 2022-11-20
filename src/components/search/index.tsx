@@ -7,7 +7,6 @@ import { useCurrentCollection } from "../../contexts/MainContext";
 import { isEmpty } from "lodash-es";
 import { IconButton, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -91,7 +90,6 @@ export const SearchBar: React.FC = () => {
           setSearch(e.target.value as string);
         }}
       />
-
       <SearchItems>
         {!isEmpty(data) &&
           data?.map((item: any) => (

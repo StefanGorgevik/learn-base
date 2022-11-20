@@ -66,7 +66,7 @@ const initialModalSettings: DeleteModalSettingsProps = {
 
 export const AddSubjectPage: React.FC = () => {
   const { setAlert, setEditing, editing, currentCollection } = useMainContext();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetPost(id || "", currentCollection);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -110,8 +110,8 @@ export const AddSubjectPage: React.FC = () => {
       contents: allEditorContents,
     };
     let message = "Item added!";
-    if (editing) {
-      newPost["id"] = id;
+    if (editing && id) {
+      newPost.id = id;
       message = "Item updated!";
       updatePost(newPost);
     } else {

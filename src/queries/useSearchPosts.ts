@@ -1,6 +1,7 @@
-import { useQuery } from "react-query";
+import { useQuery, UseQueryResult } from "react-query";
 import { useCurrentCollection } from "../contexts/MainContext";
-import { PostsResponseProps } from "./useGetPosts";
+import { SearchItemProps } from "../types/firebase";
+import { getIdFromName } from "../utils/utils";
 
 const searchPosts = async (search: string, currentCollection: string) => {
   if (!search) return null;
@@ -31,7 +32,9 @@ const searchPosts = async (search: string, currentCollection: string) => {
   return result;
 };
 
-export const useSearchPosts = (search: string) => {
+export const useSearchPosts = (
+  search: string
+): UseQueryResult<SearchItemProps[]> => {
   const { currentCollection } = useCurrentCollection();
   return useQuery({
     queryKey: ["search-posts", search],
@@ -43,9 +46,7 @@ export const useSearchPosts = (search: string) => {
           if (item?.document) {
             array.push({
               title: item.document.fields.title.stringValue,
-              id: item.document.name.substr(
-                item.document.name.lastIndexOf("/") + 1
-              ),
+              id: getIdFromName(item.document.name),
             });
           }
         });
