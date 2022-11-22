@@ -29,7 +29,7 @@ const styleMap = {
   },
 };
 
-export interface DraftEditorProps {
+interface DraftEditorProps {
   defaultValue?: ContentState;
   onChange: (value: ContentState) => unknown;
   onBlur?: () => unknown;

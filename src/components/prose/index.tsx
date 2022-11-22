@@ -27,7 +27,7 @@ function customBlockStyleFn(contentBlock: ContentBlock) {
   return "";
 }
 
-export interface DraftEditorProps {
+interface DraftEditorProps {
   value: RawDraftContentState;
 }
 

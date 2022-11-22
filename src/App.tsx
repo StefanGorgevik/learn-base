@@ -13,6 +13,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import { ViewSubject } from "./pages/viewSubject";
 import { initAlertData, useAlert } from "./contexts/MainContext";
+import { Todos } from "./pages/todos";
 const queryClient = new QueryClient();
 
 const theme = createTheme({
@@ -68,6 +69,7 @@ const App = () => {
               <Route path="add" element={<AddSubjectPage />} />
               <Route path="edit/:id" element={<AddSubjectPage />} />
               <Route path="view/:id" element={<ViewSubject />} />
+              <Route path="todos" element={<Todos />} />
             </Routes>
           </BrowserRouter>
         </div>

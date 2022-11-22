@@ -26,3 +26,28 @@ export interface SearchItemProps {
   title: string;
   id: string;
 }
+
+export interface ResponseTodoProps {
+  category: {
+    stringValue: string;
+  };
+  description: {
+    stringValue: string;
+  };
+  title: {
+    stringValue: string;
+  };
+  level: {
+    stringValue: string;
+  };
+  completed: {
+    booleanValue: boolean;
+  };
+}
+
+export interface TodosResponseProps {
+  name: string;
+  createTime: string;
+  updateTime: string;
+  fields: ResponseTodoProps;
+}

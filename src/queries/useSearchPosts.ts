@@ -1,36 +1,8 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { useCurrentCollection } from "../contexts/MainContext";
 import { SearchItemProps } from "../types/firebase";
+import { searchPosts } from "../utils";
 import { getIdFromName } from "../utils/utils";
-
-const searchPosts = async (search: string, currentCollection: string) => {
-  if (!search) return null;
-  const query = {
-    structuredQuery: {
-      where: {
-        fieldFilter: {
-          field: {
-            fieldPath: "keywords",
-          },
-          op: "ARRAY_CONTAINS_ANY",
-          value: {
-            arrayValue: {
-              values: [{ stringValue: search }],
-            },
-          },
-        },
-      },
-      from: [{ collectionId: currentCollection }],
-    },
-  };
-  const response = await fetch(
-    `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents:runQuery`,
-    { method: "POST", body: JSON.stringify(query) }
-  );
-  const result = await response.json();
-
-  return result;
-};
 
 export const useSearchPosts = (
   search: string

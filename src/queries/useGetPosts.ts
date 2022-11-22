@@ -1,16 +1,7 @@
 import { useQuery } from "react-query";
 import { PostProps } from "../types";
 import { PostsResponseProps } from "../types/firebase";
-import { getIdFromName } from "../utils/utils";
-
-const getPosts = async (currentCollection: string) => {
-  const response = await fetch(
-    `https://firestore.googleapis.com/v1/projects/learn-base-86d03/databases/(default)/documents/${currentCollection}/`
-  );
-  const result = await response.json();
-
-  return result;
-};
+import { getIdFromName, getPosts } from "../utils";
 
 export const useGetPosts = (currentCollection: string) => {
   const { data: result, isLoading } = useQuery({

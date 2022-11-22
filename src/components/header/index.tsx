@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEditing } from "../../contexts/MainContext";
 import { SearchBar } from "../search";
 import { TabsBar } from "./tabs";
+import ListIcon from "@mui/icons-material/List";
 
 export const Header: React.FC = () => {
   const { editing, setEditing } = useEditing();
@@ -30,6 +31,11 @@ export const Header: React.FC = () => {
       setEditing(false);
     }
   };
+
+  const mainTitle = useMemo(
+    () => (pathname === "/add" ? "Add a new subject" : "Add a Todo"),
+    [pathname]
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -53,7 +59,7 @@ export const Header: React.FC = () => {
                   variant="h6"
                   color="white"
                 >
-                  {editing ? `Editing` : "Add a new subject"}
+                  {editing ? `Editing` : mainTitle}
                 </Typography>
               )}
             </IconButton>
@@ -78,11 +84,19 @@ export const Header: React.FC = () => {
             {showAddButton && (
               <>
                 <TabsBar />
-                <Box style={{
-                  display: 'flex',
-                  gap: '2rem'
-                }}>
+                <Box
+                  style={{
+                    display: "flex",
+                    gap: "2rem",
+                  }}
+                >
                   <SearchBar />
+                  <IconButton
+                    onClick={() => navigate("/todos")}
+                    sx={{ color: "white" }}
+                  >
+                    <ListIcon />
+                  </IconButton>
                   <IconButton
                     onClick={() => navigate("/add")}
                     sx={{ color: "white" }}
