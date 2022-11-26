@@ -37,7 +37,6 @@ export const useTodos = (completed: string) => {
 
   let array: TodoProps[] = [];
   if (result) {
-    console.log("Result", result);
     result?.forEach((item: any) => {
       if (item?.document) {
         array.push({

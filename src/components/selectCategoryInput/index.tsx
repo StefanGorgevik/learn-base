@@ -29,7 +29,7 @@ export const SelectCategoryInput: React.FC<SelectCategoryInputProps> = ({
   return (
     <Box sx={{ minWidth: "100%" }}>
       <FormControl fullWidth>
-        <InputLabel id="categoty-select-label">Category</InputLabel>
+        <InputLabel id="category-select-label">Category</InputLabel>
         <Select
           labelId="category-label"
           id="category"

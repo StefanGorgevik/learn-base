@@ -29,12 +29,12 @@ export const SelectLevelInput: React.FC<SelectCategoryInputProps> = ({
   return (
     <Box sx={{ minWidth: "100%" }}>
       <FormControl fullWidth>
-        <InputLabel id="categoty-select-label">Category</InputLabel>
+        <InputLabel id="level-select-label">Level</InputLabel>
         <Select
           labelId="level-label"
           id="level"
           value={level}
-          label="Category"
+          label="Level"
           onChange={handleChange}
           required
         >

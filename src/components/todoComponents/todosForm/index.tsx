@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  TextField,
-  TextareaAutosize,
-  Grid,
-  Button,
-  Box,
-} from "@mui/material";
+import { TextField, TextareaAutosize, Grid, Button, Box } from "@mui/material";
 
 import { SelectCategoryInput } from "../../selectCategoryInput";
 import { useSaveTodo, useUpdateTodo } from "../../../queries";
@@ -62,9 +56,12 @@ export const TodosForm: React.FC<TodosFormProps> = ({
     } else {
       saveTodo(newTodo);
     }
-    console.log("HERE");
     setCurrentTodo(initTodo);
     resetForm();
+  };
+
+  const handleCategoryChange = (type: string, value: string) => {
+    setCategory(value);
   };
 
   return (
@@ -99,7 +96,7 @@ export const TodosForm: React.FC<TodosFormProps> = ({
             />
             <SelectCategoryInput
               category={category}
-              onCategoryChange={setCategory}
+              onCategoryChange={handleCategoryChange}
             />
             <TextareaAutosize
               className="textArea"
@@ -112,10 +109,7 @@ export const TodosForm: React.FC<TodosFormProps> = ({
                 setDescription(e.target.value)
               }
             />
-            <SelectLevelInput
-              level={level}
-              onLevelChange={setLevel}
-            />
+            <SelectLevelInput level={level} onLevelChange={setLevel} />
           </Box>
           <Box
             sx={{

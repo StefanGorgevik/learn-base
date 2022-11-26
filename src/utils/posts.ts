@@ -27,7 +27,6 @@ export const getPost = async (id: string, currentCollection: string) => {
         : [],
     };
   } catch (e) {
-    console.log("e", e);
     throw new Error("Error occurred!");
   }
 };

@@ -6,7 +6,6 @@ export const getTodos = async (completed: string) => {
     method: "POST",
   };
 
-  console.log("isCompleted", isCompleted, completed);
   const query: any = {
     structuredQuery: {
       from: [{ collectionId: "todos" }],

@@ -109,7 +109,7 @@ export const PostContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setCurrentEditorState(newEditorState);
   };
-  console.log("state", state);
+
   const setDataHandler = useCallback(
     (data: PostProps) => {
       dispatch({ type: SET_DATA, payload: data });

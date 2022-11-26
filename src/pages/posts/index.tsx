@@ -28,7 +28,7 @@ const initialModalSettings: DeleteModalSettingsProps = {
 export const Posts: React.FC = () => {
   const { setAlert, currentCollection } = useMainContext();
   const { data, isLoading } = useGetPosts(currentCollection);
-  console.log("data", data, isLoading);
+
   const { mutate } = useDeletePost(currentCollection);
   const [deleteModalSettings, setDeleteModalSettings] =
     useState<DeleteModalSettingsProps>(initialModalSettings);
@@ -54,7 +54,6 @@ export const Posts: React.FC = () => {
     );
   }
 
-  console.log("data POSTS", data);
   if ((data?.length === 0 && !isLoading) || !data) {
     return (
       <Grid container justifyContent="center" sx={{ marginTop: 10 }}>
@@ -104,9 +103,6 @@ export const Posts: React.FC = () => {
                 <IconButton
                   aria-label="share"
                   onClick={() => {
-                    if (item.id) {
-                      console.log("DATA POSTS", item?.id);
-                    }
                     navigate(`/edit/${item.id?.trim()}`);
                   }}
                 >
