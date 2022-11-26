@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
   };
 
   const mainTitle = useMemo(
-    () => (pathname === "/add" ? "Add a new subject" : "Add a Todo"),
+    () => (pathname === "/add" ? "Add a new subject" : "Add a todo"),
     [pathname]
   );
 

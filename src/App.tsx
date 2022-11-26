@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ViewSubject } from "./pages/viewSubject";
 import { initAlertData, useAlert } from "./contexts/MainContext";
 import { Todos } from "./pages/todos";
+import { PostContext, PostContextProvider } from "./contexts/PostContext";
 const queryClient = new QueryClient();
 
 const theme = createTheme({
@@ -64,13 +65,15 @@ const App = () => {
                 </Alert>
               </Snackbar>
             )}
-            <Routes>
-              <Route path="/" element={<Posts />} />
-              <Route path="add" element={<AddSubjectPage />} />
-              <Route path="edit/:id" element={<AddSubjectPage />} />
-              <Route path="view/:id" element={<ViewSubject />} />
-              <Route path="todos" element={<Todos />} />
-            </Routes>
+            <PostContextProvider>
+              <Routes>
+                <Route path="/" element={<Posts />} />
+                <Route path="add" element={<AddSubjectPage />} />
+                <Route path="edit/:id" element={<AddSubjectPage />} />
+                <Route path="view/:id" element={<ViewSubject />} />
+                <Route path="todos" element={<Todos />} />
+              </Routes>
+            </PostContextProvider>
           </BrowserRouter>
         </div>
       </ThemeProvider>

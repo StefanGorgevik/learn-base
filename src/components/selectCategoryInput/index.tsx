@@ -14,7 +14,7 @@ const CATEGORIES: CategoryProps[] = [
 ];
 
 interface SelectCategoryInputProps {
-  onCategoryChange: (category: string) => void;
+  onCategoryChange: (type: string, value: string) => void;
   category: string;
 }
 
@@ -23,7 +23,7 @@ export const SelectCategoryInput: React.FC<SelectCategoryInputProps> = ({
   category,
 }) => {
   const handleChange = (event: SelectChangeEvent) => {
-    onCategoryChange(event.target.value as string);
+    onCategoryChange("category", event.target.value as string);
   };
 
   return (
