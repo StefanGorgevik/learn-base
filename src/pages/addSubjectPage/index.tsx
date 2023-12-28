@@ -14,7 +14,6 @@ import { DeleteModal } from "../../components/deleteModal";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMainContext } from "../../contexts/MainContext";
 import { Keywords } from "../../components/addSubjectComponents/keywords";
-import { EditorContents } from "../../components";
 import { PostContext } from "../../contexts/PostContext";
 import { MainPostForm } from "../../components/addSubjectComponents/mainPostForm";
 import { EditorContent } from "../../components/addSubjectComponents/editorContent";
@@ -159,9 +158,6 @@ export const AddSubjectPage: React.FC = () => {
               <MainPostForm />
               <Box>
                 <Keywords />
-                <EditorContents
-                  setDeleteModalSettings={setDeleteModalSettings}
-                />
               </Box>
             </Box>
             {currentEditorState?.id && <EditorContent />}
